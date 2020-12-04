@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>待办列表</title>
     <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
@@ -216,9 +216,9 @@
                             </div>
                             <div className="choose-button">
                                 <ul>
-                                    <li style={{ backgroundColor: display === 'all' ? '#dFFF99' : '#DDDDDD' }}><a href='#' onClick={(e) => { this.changeDisplay(e, 0) }}>全部</a></li>
-                                    <li style={{ backgroundColor: display === 'completed' ? '#dFFF99' : '#DDDDDD' }}><a href='#' onClick={(e) => { this.changeDisplay(e, 1) }}>已完成</a></li>
-                                    <li style={{ backgroundColor: display === 'uncompleted' ? '#dFFF99' : '#DDDDDD' }}><a href='#' onClick={(e) => { this.changeDisplay(e, 2) }}>未完成</a></li>
+                                    <li style={{ backgroundColor: display === 'all' ? '#FFFFCC' : '#DDDDDD' }}><a href='#' onClick={(e) => { this.changeDisplay(e, 0) }}>全部</a></li>
+                                    <li style={{ backgroundColor: display === 'completed' ? '#FFFFCC' : '#DDDDDD' }}><a href='#' onClick={(e) => { this.changeDisplay(e, 1) }}>已完成</a></li>
+                                    <li style={{ backgroundColor: display === 'uncompleted' ? '#FFFFCC' : '#DDDDDD' }}><a href='#' onClick={(e) => { this.changeDisplay(e, 2) }}>未完成</a></li>
                                 </ul>
                                 <button onClick={this.clearCompleted}>清除所有已完成</button>
                             </div>
