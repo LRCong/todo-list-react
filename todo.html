@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Tahoma, sans-serif;
+        }
+
+        section {
+            display: flex;
+            min-height: 100vh;
+            justify-content: center;
+            align-items: center;
+            background: #CCFFCC;
+        }
+
+        section .container {
+            width: 600px;
+            background: #CCCCFF;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        section .container .todo-input {
+            padding: 20px;
+            padding-bottom: 0;
+            width: 100%;
+        }
+
+        section .container .todo-input input {
+            width: 100%;
+            padding: 8px;
+            outline: none;
+            border: none;
+            background: #f5f5f5;
+            color: #333;
+            font-size: 14px;
+            letter-spacing: 1px;
+            font-weight: 300;
+        }
+
+        section .container .todo-input button,
+        section .container .todo-input button:focus {
+            margin-top: 10px;
+            width: 100px;
+            height: 30px;
+            border: none;
+            outline: none;
+            background: #677eff;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 1px;
+        }
+
+        section .container .todo-list {
+            padding: 10px 40px;
+            width: 100%;
+        }
+
+        section .container .todo-list .list ul {
+            list-style: none;
+        }
+
+        section .container .todo-list .list ul li {
+            font-size: 20px;
+            font-weight: 600px;
+            line-height: 26px;
+            height: 30px;
+            position: relative;
+        }
+
+        section .container .todo-list .list ul li input[type='checkbox'] {
+            width: 20px;
+            height: 20px;
+            position: absolute;
+            top: calc(50% - 10px);
+        }
+
+        section .container .todo-list .list ul li p {
+            padding-left: 40px;
+        }
+
+        section .container .choose-button {
+            width: 100%;
+        }
+
+        section .container .choose-button ul {
+            margin: 0 0 10px 20px;
+            list-style: none;
+            display: inline-block;
+        }
+
+        section .container .choose-button li {
+            display: inline-flex;
+            width: 60px;
+            height: 30px;
+            margin-top: 1px;
+            border: 1px solid black;
+            margin-right: 10px;
+            line-height: 30px;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+
+        section .container .choose-button li a {
+            display: block;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+            color: #333;
+        }
+
+        section .container .choose-button button,
+        section .container .choose-button button:focus {
+            /* width: 100px; */
+            height: 30px;
+            line-height: 20px;
+            outline: none;
+            border: none;
+            padding: 5px;
+            margin-right: 20px;
+            background: #FF6666;
+            font-size: 16px;
+            font-weight: 600px;
+            letter-spacing: 1px;
+            float: right;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app"></div>
+    <script type="text/babel">
+        class ToDo extends React.Component {
+            state = {
+                val: '请输入待办事项',
+                list: [],
+                display: 'all',
+                index: 0
+            };
+
+            handleChange = (event) => {
+                this.setState({
+                    val: event.target.value,
+                });
+            };
+
+            handleAdd = () => {
+                const { index, val, list } = this.state;
+                list.push({ index, val, checked: false });
+                this.setState({
+                    list: list,
+                    index: index + 1
+                })
+            };
+
+            editChecked = (index) => {
+                const { list } = this.state;
+                list[index].checked = !list[index].checked;
+                this.setState({
+                    list
+                });
+            };
+
+            clearCompleted = () => {
+                const { list } = this.state;
+                this.setState({
+                    list: list.filter((item) => !item.checked)
+                });
+            };
+
+            changeDisplay = (e, index) => {
+                e.preventDefault();
+                this.setState({
+                    display: ['all', 'completed', 'uncompleted'][index]
+                });
+            };
+            render() {
+                let { val, list, display } = this.state;
+                list = display === 'all' ? list : display === 'completed' ? list.filter((item) => item.checked) : list.filter((item) => !item.checked);
+                const listItem = [];
+                list.map((item, index) => {
+                    let li = (
+                        <li key={item.index}>
+                            <input type="checkbox" onChange={() => { this.editChecked(index); }} defaultChecked={item.checked}></input>
+                            <p style={{ textDecorationLine: item.checked ? 'line-through' : 'none' }}>{item.val}</p>
+                        </li>
+                    );
+                    listItem.push(li);
+                })
+                return (
+                    <section>
+                        <div className='container'>
+                            <div className='todo-input'>
+                                <input type='text' value={val} onChange={this.handleChange} />
+                                <button onClick={this.handleAdd}>添加</button>
+                            </div>
+                            <div className="todo-list">
+                                <div className="list">
+                                    <ul>
+                                        {listItem}
+                                    </ul>
+                                </div>
+                            </div>
+                            <div className="choose-button">
+                                <ul>
+                                    <li style={{ backgroundColor: display === 'all' ? '#dFFF99' : '#DDDDDD' }}><a href='#' onClick={(e) => { this.changeDisplay(e, 0) }}>全部</a></li>
+                                    <li style={{ backgroundColor: display === 'completed' ? '#dFFF99' : '#DDDDDD' }}><a href='#' onClick={(e) => { this.changeDisplay(e, 1) }}>已完成</a></li>
+                                    <li style={{ backgroundColor: display === 'uncompleted' ? '#dFFF99' : '#DDDDDD' }}><a href='#' onClick={(e) => { this.changeDisplay(e, 2) }}>未完成</a></li>
+                                </ul>
+                                <button onClick={this.clearCompleted}>清除所有已完成</button>
+                            </div>
+                        </div>
+                    </section>
+                );
+            }
+        }
+        ReactDOM.render(
+            <ToDo />,
+            document.getElementById('app')
+        );
+    </script>
+</body>
+
+</html>
